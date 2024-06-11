@@ -66,5 +66,4 @@ def corrida_formula_e():
         else:
             print("Que pena! O piloto que você escolheu não ganhou a corrida.")
 
-# Executar a corrida
 corrida_formula_e()
