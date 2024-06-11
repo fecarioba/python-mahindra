@@ -8,7 +8,6 @@ def definir_posicoes_de_largada(pilotos):
     random.shuffle(posicoes_largada)
     return posicoes_largada
 
-# Função para simular a corrida
 def simular_corrida(pilotos, voltas=10):
     posicoes = pilotos[:] 
     for volta in range(1, voltas + 1):
