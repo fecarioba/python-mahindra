@@ -1,8 +1,18 @@
 import random
 import time
+#Bibliotecas utilizadas para fazer o sorteio das posições iniciais, chances de ultrapassagem
+#E para ter um peaqueno delay entre as voltas
 
 pilotos = ["Piloto A", "Piloto B", "Piloto C", "Piloto D", 'Piloto E', 'Piloto F']
-creditos = 100  # Inicializando com 100 créditos
+creditos = 100  # Créditos iniciais
+
+
+def checarNumero(msg):
+    num = input(msg)
+    while not num.isnumeric():
+        num = input(msg)
+    num = int(num) 
+    return num
 
 def definir_posicoes_de_largada(pilotos):
     posicoes_largada = pilotos[:]
@@ -24,8 +34,8 @@ def calcular_ganho(posicao_largada, aposta):
     return int(aposta * (len(pilotos) / (posicao_largada + 1)))
 
 def corrida_formula_e():
-    global creditos  # Declarando que a variável `creditos` é global para podermos modificar seu valor dentro da função
-
+    global creditos  
+    
     while True:
         print("Início da corrida de Fórmula E")
         
