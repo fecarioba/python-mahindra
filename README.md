@@ -6,7 +6,7 @@ Entrega da matéria de computacional thinking with pyhton para a sprint da CHALL
 
 ### Integrantes
 
-RM: 556785 // Carlos Eduardo dos Santos Ribeiro Filho
+RM: 556785 // Carlos Eduardo dos Santos Ribeiro Filho <br>
 RM: 555530 // Djalma Moreira de Andrade Filho
 RM: 558447 // Felipe Paes de Barros Muller Carioba
 RM: 556506 // Nicolas Caciolato Reis
