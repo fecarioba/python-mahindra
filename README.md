@@ -24,7 +24,9 @@ Decidimos que, focar em estética, vínculo com corridas em cenários de rua, te
 
 ### 🐍 Visão geral em Computational Thinking with Python
 
-
+Este projeto consiste em um simulador de corridas da fórmula E. 
+Ele simula um grid de largada com os pilotos disponíveis, possibilita torcida e apostas, simula ultrapassagens e quando a simulação se encerra, o programa verifica se o piloto vencedor é o mesmo escolhido pelo usuário e se o usuário fe alguma aposta para calcular seu retorno ou prejuízo.
+Após todo este processo o programa pergunta se o usuário deseja simular a corrida novamente e participar de toda essa nova aventura denovo.
 
 ## 🔨 Ferramentas
 
