@@ -4,14 +4,43 @@ import random
 import time
 # Biblioteca que possibilita adicionar um pequeno delay entre as voltas da simulação
 
+# import pandas as pd
+# Lembrar de utilizar dataFrames(df) com panda
+# Poderiamos no final da corrida printar o df com todas as caracteristicas 
+# do piloto vencedor ao inves de apenas o nome
+
+
 piloto1 = {
     'nome': 'Sergio Camara',
-    'idade': 30,
+    'idade': 26,
+    'equipe': "ERT",
+    'historico': 0
+}
+# Outra maneira de declarar o dicionario sem a key nome 
+#talvez melhor na hora de implementar na lista de pilotos e consequentemente 
+# melhor para mostrar na simulação
+sergioCamara = {
+    'idade': 26,
     'equipe': "ERT",
     'historico': 0
 }
 
-pilotos = [piloto1, "Lucas di Grassi", "Norman Nato", "Sébastien Buemi", 'Sam Bird', 'Stoffel Vandoorne']
+# Ideia de utilizar dicionarios para armazenar informações adicionais sobre os pilotos
+# E poder utilizar o histórico do piloto como consulta para pensar em suas apostas
+# historico bom -> maior chance de ultrapassagem -> maior a chance de ganhar -> menor o retorno
+# a logica poderia ser de quanto menor fosse a soma das posições de seu histórico, 
+# maior seriam as chances de ganhar -> retorno menor
+
+# Se conseguirmos implementar as odds de acordo com o histórico com certeza da para 
+# implementar com base na posição de largfada, tornando a corrida mais realista
+
+# uma implementação de matriz poderia ocorrer na criacao de uma array que armazenasse
+# as posições dos pilotos nas simulações
+# EX: resultados = [[resultadosCorrida1], [resultadosCorrida2] etc] 
+
+# a array pilotos viraria um array de objetos/dicionarios
+
+pilotos = [piloto1, sergioCamara, "Lucas di Grassi", "Norman Nato", "Sébastien Buemi", 'Sam Bird', 'Stoffel Vandoorne']
 # Pilotos atuais da fórmula E que podem ser escolhidos para realizar a simulação 
 creditos = 100  # Créditos iniciais
 
@@ -129,6 +158,4 @@ def corrida_formula_e():
             # Se o input de jogar novamente for diferente de sim, o loop da simulação quebra e é encerrado
             break
 
-# corrida_formula_e()
-
-print(pilotos)
+corrida_formula_e()
