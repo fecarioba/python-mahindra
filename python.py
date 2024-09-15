@@ -4,8 +4,14 @@ import random
 import time
 # Biblioteca que possibilita adicionar um pequeno delay entre as voltas da simulação
 
+piloto1 = {
+    'nome': 'Sergio Camara',
+    'idade': 30,
+    'equipe': "ERT",
+    'historico': 0
+}
 
-pilotos = ["Sergio Camara", "Lucas di Grassi", "Norman Nato", "Sébastien Buemi", 'Sam Bird', 'Stoffel Vandoorne']
+pilotos = [piloto1, "Lucas di Grassi", "Norman Nato", "Sébastien Buemi", 'Sam Bird', 'Stoffel Vandoorne']
 # Pilotos atuais da fórmula E que podem ser escolhidos para realizar a simulação 
 creditos = 100  # Créditos iniciais
 
@@ -123,4 +129,6 @@ def corrida_formula_e():
             # Se o input de jogar novamente for diferente de sim, o loop da simulação quebra e é encerrado
             break
 
-corrida_formula_e()
+# corrida_formula_e()
+
+print(pilotos)
