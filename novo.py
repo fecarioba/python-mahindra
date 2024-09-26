@@ -11,11 +11,6 @@ dados_pilotos = {
 
 pilotos_df = pd.DataFrame(dados_pilotos)
 
-aposta_info = {
-    'creditos': 100,
-    'aposta': 0
-}
-
 def checarNumero(msg):
     num = input(msg)
     while not num.isnumeric():
@@ -37,11 +32,11 @@ def simular_corrida(pilotos_df, voltas=10):
         time.sleep(1)
     return posicoes
 
-def calcular_ganho(posicao_largada, aposta):
-    return int(aposta * (len(pilotos_df) / (posicao_largada + 1)))
+def calcular_ganho(posicao_largada, aposta, total_pilotos):
+    return int(aposta * (total_pilotos / (posicao_largada + 1)))
 
 def corrida_formula_e():
-    global aposta_info
+    creditos = 100
 
     while True:
         print("Início da corrida de Fórmula E")
@@ -49,7 +44,8 @@ def corrida_formula_e():
         posicoes_largada = definir_posicoes_de_largada(pilotos_df)
         print("\nPosições de Largada:")
         for i, piloto in enumerate(posicoes_largada['nome']):
-            print(f"{i + 1}. {piloto}")
+            equipe = posicoes_largada.iloc[i]['equipe']
+            print(f"{i + 1}. {piloto} - Equipe: {equipe}")
 
         escolha = checarNumero("Escolha um piloto para torcer (número): ")
         while not (1 <= escolha <= len(pilotos_df)):
@@ -60,9 +56,9 @@ def corrida_formula_e():
         piloto_escolhido = posicoes_largada.iloc[escolha]['nome']
         print(f"Você escolheu: {piloto_escolhido}")
 
-        print(f"Você tem {aposta_info['creditos']} créditos disponíveis.")
-        aposta_info['aposta'] = 0
-        if aposta_info['creditos'] > 0:
+        print(f"Você tem {creditos} créditos disponíveis.")
+        aposta = 0
+        if creditos > 0:
             aposta_opcional = input("Você quer apostar? (s/n): ").lower()
 
             while aposta_opcional not in ['s', 'n']:
@@ -70,16 +66,16 @@ def corrida_formula_e():
                 aposta_opcional = input("Você quer apostar? (s/n): ").lower()
 
             if aposta_opcional == 's':
-                aposta_info['aposta'] = checarNumero("Digite o valor da aposta: ")
+                aposta = checarNumero("Digite o valor da aposta: ")
 
-                while aposta_info['aposta'] <= 0 or aposta_info['aposta'] > aposta_info['creditos']:
-                    if aposta_info['aposta'] <= 0:
+                while aposta <= 0 or aposta > creditos:
+                    if aposta <= 0:
                         print('Digite um valor de aposta válido')
                     else:
-                        print(f'Você não pode apostar mais do que seus créditos disponíveis ({aposta_info["creditos"]}).')
-                    aposta_info['aposta'] = checarNumero("Digite o valor da aposta: ")
+                        print(f'Você não pode apostar mais do que seus créditos disponíveis ({creditos}).')
+                    aposta = checarNumero("Digite o valor da aposta: ")
 
-                print(f"Você apostou {aposta_info['aposta']} no {piloto_escolhido}")
+                print(f"Você apostou {aposta} no {piloto_escolhido}")
         else:
             print("Você não tem créditos suficientes para apostar. A corrida será simulada sem apostas.")
 
@@ -90,25 +86,25 @@ def corrida_formula_e():
         print(f"\nO vencedor da corrida é: {vencedor}")
 
         if vencedor == piloto_escolhido:
-            if aposta_info['aposta'] > 0:
-                ganho = calcular_ganho(escolha, aposta_info['aposta'])
-                aposta_info['creditos'] += ganho
+            if aposta > 0:
+                ganho = calcular_ganho(escolha, aposta, len(pilotos_df))
+                creditos += ganho
                 print(f"Parabéns! O piloto que você escolheu ganhou a corrida! Você ganhou {ganho} créditos!")
             else:
-                aposta_info['creditos'] += 50
+                creditos += 50
                 print("Parabéns! O piloto que você escolheu ganhou a corrida!")
         else:
-            if aposta_info['aposta'] > 0:
-                aposta_info['creditos'] -= aposta_info['aposta']
+            if aposta > 0:
+                creditos -= aposta
                 print("Que pena! O piloto que você escolheu não ganhou a corrida. Você perdeu sua aposta.")
             else:
                 print("Que pena! O piloto que você escolheu não ganhou a corrida.")
 
-        print(f"Você agora tem {aposta_info['creditos']} créditos.")
+        print(f"Você agora tem {creditos} créditos.")
 
         jogar_novamente = input("Você gostaria de simular a corrida novamente? (sim/nao): ").strip().lower()
         while jogar_novamente not in ['sim', 'nao']:
-            jogar_novamente = input('Digite um valor válido (sim ou nao)')
+            jogar_novamente = input('Digite um valor válido (sim ou nao): ')
         if jogar_novamente != 'sim':
             break
 
