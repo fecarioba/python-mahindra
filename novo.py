@@ -4,9 +4,7 @@ import pandas as pd
 
 dados_pilotos = {
     'nome': ['Sergio Camara', 'Lucas di Grassi', 'Norman Nato', 'Sébastien Buemi', 'Sam Bird', 'Stoffel Vandoorne'],
-    'idade': [26, 39, 32, 35, 37, 32],
     'equipe': ['ERT', 'Venturi', 'NIO', 'Nissan', 'Jaguar', 'Mercedes'],
-    'historico': [0, 0, 0, 0, 0, 0]
 }
 
 pilotos_df = pd.DataFrame(dados_pilotos)
