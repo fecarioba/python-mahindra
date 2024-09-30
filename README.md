@@ -53,12 +53,15 @@ Após todo este processo o programa pergunta se o usuário deseja simular a corr
 ``` python
 import random
 import time
+import pandas
 ```
 
-### 📝 Variaveis para pilotos e creditos
+### 📝 Dicionário para armazenar os dados dos pilotos
 ``` python
-pilotos = ["Sergio Camara", "Lucas di Grassi", "Norman Nato", "Sébastien Buemi", 'Sam Bird', 'Stoffel Vandoorne']
-creditos = 100
+dados_pilotos = {
+    'nome': ['Sergio Camara', 'Lucas di Grassi', 'Norman Nato', 'Sébastien Buemi', 'Sam Bird', 'Stoffel Vandoorne'],
+    'equipe': ['ERT', 'Venturi', 'NIO', 'Nissan', 'Jaguar', 'Mercedes'],
+}
 ```
 
 ### 💻 Função para garantir que a entrada seja um número
@@ -72,75 +75,67 @@ def checarNumero(msg):
 
 ### 💻 Função para embaralhar as posições de largada dos pilotos
 ``` python
-def definir_posicoes_de_largada(pilotos):
-    posicoes_largada = pilotos[:]
-    random.shuffle(posicoes_largada)
+def definir_posicoes_de_largada(pilotos_df):
+    posicoes_largada = pilotos_df.sample(frac=1).reset_index(drop=True)
     return posicoes_largada
 ```
 
 ### 💻 Função para simular a corrida com base nas posições de largada e um número de voltas
 ``` python
-def simular_corrida(pilotos, voltas=10):
-    posicoes = pilotos[:]
+def simular_corrida(pilotos_df, voltas=10):
+    posicoes = pilotos_df.copy()
     for volta in range(1, voltas + 1):
         print(f"\nVolta {volta}")
         for i in range(len(posicoes)):
             if i > 0 and random.random() < 0.3:
-                posicoes[i], posicoes[i - 1] = posicoes[i - 1], posicoes[i]
-        print("Posições:", posicoes)
+                posicoes.iloc[i], posicoes.iloc[i - 1] = posicoes.iloc[i - 1], posicoes.iloc[i]
+        print("Posições:", posicoes['nome'].tolist())
         time.sleep(1)
     return posicoes
 ```
 
 ### 💻 Função para calcular os ganhos com base na posição de largada e na aposta
 ``` python
-def calcular_ganho(posicao_largada, aposta):
-    return int(aposta * (len(pilotos) / (posicao_largada + 1)))
+def calcular_ganho(posicao_largada, aposta, total_pilotos):
+    return int(aposta * (total_pilotos / (posicao_largada + 1)))
 ```
 
 ### 🏎️ Função para executar o código
 ``` python
-def corrida_formula_e(): 
-    # Função que inicia a simulação da corrida
-    global creditos
+def corrida_formula_e():
+    creditos = 100
 
     while True:
-        # Este loop existe para que no final o usuário possa escolher simular de novo
         print("Início da corrida de Fórmula E")
 
-        posicoes_largada = definir_posicoes_de_largada(pilotos)
+        posicoes_largada = definir_posicoes_de_largada(pilotos_df)
         print("\nPosições de Largada:")
-        for i, piloto in enumerate(posicoes_largada):
-            # For que enumera as posições dos pilotos
-            print(f"{i + 1}. {piloto}")
+        for i, piloto in enumerate(posicoes_largada['nome']):
+            equipe = posicoes_largada.iloc[i]['equipe']
+            print(f"{i + 1}. {piloto} - Equipe: {equipe}")
 
         escolha = checarNumero("Escolha um piloto para torcer (número): ")
-        while not (1 <= escolha <= len(pilotos)):
-            # While que garante que o usuário escolha um corredor válido
+        while not (1 <= escolha <= len(pilotos_df)):
             print('Digite um número válido do piloto')
             escolha = checarNumero("Escolha um piloto para torcer (número): ")
 
         escolha -= 1
-        piloto_escolhido = posicoes_largada[escolha]
+        piloto_escolhido = posicoes_largada.iloc[escolha]['nome']
         print(f"Você escolheu: {piloto_escolhido}")
 
         print(f"Você tem {creditos} créditos disponíveis.")
         aposta = 0
         if creditos > 0:
-            # Verifica se o usuário possui créditos para poder apostar
             aposta_opcional = input("Você quer apostar? (s/n): ").lower()
 
-            while aposta_opcional != 's' and aposta_opcional != 'n':
-                # Verifica se o usuário da uma resposta de sim ou não válida
+            while aposta_opcional not in ['s', 'n']:
                 print('Por favor digite "s" ou "n"')
                 aposta_opcional = input("Você quer apostar? (s/n): ").lower()
 
             if aposta_opcional == 's':
-                # Se a aposta for sim o programa pede o valor
                 aposta = checarNumero("Digite o valor da aposta: ")
 
                 while aposta <= 0 or aposta > creditos:
-                    # Verifica se a aposta tem um valor válido
                     if aposta <= 0:
                         print('Digite um valor de aposta válido')
                     else:
@@ -152,25 +147,21 @@ def corrida_formula_e():
             print("Você não tem créditos suficientes para apostar. A corrida será simulada sem apostas.")
 
         posicoes_finais = simular_corrida(posicoes_largada)
-        print("\nPosições Finais:", posicoes_finais)
+        print("\nPosições Finais:", posicoes_finais['nome'].tolist())
 
-        vencedor = posicoes_finais[0]
+        vencedor = posicoes_finais.iloc[0]['nome']
         print(f"\nO vencedor da corrida é: {vencedor}")
 
         if vencedor == piloto_escolhido:
-            # Verifica se o piloto escolhido pelo usuário é o mesmo que ganhou a corrida
             if aposta > 0:
-                # Se o usuário apostou e ganhou, o programa calcula o valor de retorno
-                ganho = calcular_ganho(escolha, aposta)
+                ganho = calcular_ganho(escolha, aposta, len(pilotos_df))
                 creditos += ganho
                 print(f"Parabéns! O piloto que você escolheu ganhou a corrida! Você ganhou {ganho} créditos!")
             else:
-                #Se ele não apostou, ele ganha 50 créditos para apostar futuramente
                 creditos += 50
                 print("Parabéns! O piloto que você escolheu ganhou a corrida!")
         else:
             if aposta > 0:
-                # Se o usuário apostou e o corredor não ganhou, ele perde o valor de aposta
                 creditos -= aposta
                 print("Que pena! O piloto que você escolheu não ganhou a corrida. Você perdeu sua aposta.")
             else:
@@ -179,10 +170,9 @@ def corrida_formula_e():
         print(f"Você agora tem {creditos} créditos.")
 
         jogar_novamente = input("Você gostaria de simular a corrida novamente? (sim/nao): ").strip().lower()
-        while jogar_novamente != 'sim' and jogar_novamente != 'nao':
-            jogar_novamente = input('Digite um valor válido (sim ou nao)')
+        while jogar_novamente not in ['sim', 'nao']:
+            jogar_novamente = input('Digite um valor válido (sim ou nao): ')
         if jogar_novamente != 'sim':
-            # Se o input de jogar novamente for diferente de sim, o loop da simulação quebra e é encerrado
             break
 ```
 
