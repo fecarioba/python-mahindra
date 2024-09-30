@@ -9,7 +9,6 @@ dados_pilotos = {
     'historico': [0, 2, 1, 3, 4, 1] 
 }
 
-
 df_pilotos = pd.DataFrame(dados_pilotos)
 
 creditos = 100
@@ -35,8 +34,8 @@ def simular_corrida(df, voltas=10):
         time.sleep(1)
     return posicoes
 
-def calcular_ganho(posicao_largada, aposta):
-    return int(aposta * (len(df_pilotos) / (posicao_largada + 1)))
+def calcular_ganho(posicao_vencedor, aposta):
+    return int(aposta * (len(df_pilotos) / (posicao_vencedor + 1)))
 
 def corrida_formula_e(creditos): 
     while True:
@@ -86,7 +85,7 @@ def corrida_formula_e(creditos):
         print(f"\nO vencedor da corrida é: {vencedor.nome}")
 
         # Comparar diretamente as informações do piloto
-        if vencedor.nome:
+        if vencedor.nome == piloto_escolhido.nome:
             if aposta > 0:
                 ganho = calcular_ganho(escolha, aposta)
                 creditos += ganho
